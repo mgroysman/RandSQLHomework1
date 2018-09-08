@@ -1,0 +1,63 @@
+---
+title: "MikhailGroysmanHomework2_09082018"
+author: "Mikhail Groysman"
+date: "September 8, 2018"
+output: html_document
+---
+
+In this project, our surveyed population (in this porticular case all 6 are family members) rate 6 current movies on scale from 1 (lowest) to 5 (higest). 0 is assigned if person has not seen the movies. Our sample is very small, however we have everything set up so that if it is nessasary the project could be easily scaled up.
+
+Steps:
+
+1) MySQL DB created with 3 tables:
+  
+  a) tblPeopel - it contains personal info (first name, last name, relationship,  and so on)
+  b) tblMovies - movie name, year of release, and country of release
+  c) tblRating - rating by person and movie
+  
+2) 3 tables are combined into one table and the table is saved as csv file on local drive
+
+3) Csv file loaded in R
+
+4) Basic analysis is perfromed  to see any indentifable trends
+
+  a) Our population has higher number of females than males (4 vs 2)
+  b) Age varies from 39 to 73; average is 55
+  c) Phone is the most popular way to conduct surveys (half were done over the phone)
+  d) if we include ratings for movies which has not been seen (rating of 0) than average rating is 2.75
+  
+5) We create subset of our data for only movies which were seen (rating is not 0; 23 observations)
+
+  a) Black Panther and Mission Impossible are the most popular movies each seen by 5 people
+  b) Anatoly appears to be vivid movie fan, he has seen all 6 movies; Luda has only seen 1
+  c) Average rating is 4.3
+  
+6) Building histogram of age distribution; two generational clusters 40-50's and over 70
+
+7) Scatterplot does not show clear correlation between Age and Rating
+
+8) Boxplot indicate that movies got mostly positive reviews with rating 1 and 2 being outliers
+
+
+```{r }
+
+movies<-read.csv(file="c:/Dataflights/MoviesOut.csv", header=FALSE, sep=",")
+
+movies
+
+names(movies)<-c("Rate_id", "Movie_id", "MName", "Direcror", "RYear", "Country", "PersonID", "FName", "LName", "Relationship", "Gender", "Age", "SDate", "SMethod", "Rating" )
+
+summary(movies)
+
+moviesNo0<-subset(movies,movies$Rating>0)
+
+summary(moviesNo0)
+
+hist(moviesNo0$Age, main="Age Histogram", xlab="Age")
+
+plot(Rating~Age, data=moviesNo0)
+
+boxplot(moviesNo0$Rating)
+
+
+```
